@@ -19,6 +19,8 @@ namespace CPE200Lab1
         private string firstOperand;
         private string operate;
 
+        
+
         private void resetAll()
         {
             lblDisplay.Text = "0";
@@ -28,44 +30,44 @@ namespace CPE200Lab1
             isAfterEqual = false;
         }
 
-        private string calculate(string operate, string firstOperand, string secondOperand, int maxOutputSize = 8)
-        {
-            switch(operate)
-            {
-                case "+":
-                    return (Convert.ToDouble(firstOperand) + Convert.ToDouble(secondOperand)).ToString();
-                case "-":
-                    return (Convert.ToDouble(firstOperand) - Convert.ToDouble(secondOperand)).ToString();
-                case "X":
-                    return (Convert.ToDouble(firstOperand) * Convert.ToDouble(secondOperand)).ToString();
-                case "÷":
-                    // Not allow devide be zero
-                    if(secondOperand != "0")
-                    {
-                        double result;
-                        string[] parts;
-                        int remainLength;
+        //private string calculate(string operate, string firstOperand, string secondOperand, int maxOutputSize = 8)
+        //{
+        //    switch(operate)
+        //    {
+        //        case "+":
+        //            return (Convert.ToDouble(firstOperand) + Convert.ToDouble(secondOperand)).ToString();
+        //        case "-":
+        //            return (Convert.ToDouble(firstOperand) - Convert.ToDouble(secondOperand)).ToString();
+        //        case "X":
+        //            return (Convert.ToDouble(firstOperand) * Convert.ToDouble(secondOperand)).ToString();
+        //        case "÷":
+        //            // Not allow devide be zero
+        //            if(secondOperand != "0")
+        //            {
+        //                double result;
+        //                string[] parts;
+        //                int remainLength;
 
-                        result = (Convert.ToDouble(firstOperand) / Convert.ToDouble(secondOperand));
-                        // split between integer part and fractional part
-                        parts = result.ToString().Split('.');
-                        // if integer part length is already break max output, return error
-                        if(parts[0].Length > maxOutputSize)
-                        {
-                            return "E";
-                        }
-                        // calculate remaining space for fractional part.
-                        remainLength = maxOutputSize - parts[0].Length - 1;
-                        // trim the fractional part gracefully. =
-                        return result.ToString("N" + remainLength);
-                    }
-                    break;
-                case "%":
-                    //your code here
-                    break;
-            }
-            return "E";
-        }
+        //                result = (Convert.ToDouble(firstOperand) / Convert.ToDouble(secondOperand));
+        //                // split between integer part and fractional part
+        //                parts = result.ToString().Split('.');
+        //                // if integer part length == already break max output, return error
+        //                if(parts[0].Length > maxOutputSize)
+        //                {
+        //                    return "E";
+        //                }
+        //                // calculate remaining space for fractional part.
+        //                remainLength = maxOutputSize - parts[0].Length - 1;
+        //                // trim the fractional part gracefully. =
+        //                return result.ToString("N" + remainLength);
+        //            }
+        //            break;
+        //        case "%":
+        //            //your code here
+        //            break;
+        //    }
+        //    return "E";
+        //}
 
         public MainForm()
         {
@@ -76,7 +78,7 @@ namespace CPE200Lab1
 
         private void btnNumber_Click(object sender, EventArgs e)
         {
-            if (lblDisplay.Text is "Error")
+            if (lblDisplay.Text == "Error")
             {
                 return;
             }
@@ -88,13 +90,13 @@ namespace CPE200Lab1
             {
                 lblDisplay.Text = "0";
             }
-            if(lblDisplay.Text.Length is 8)
+            if(lblDisplay.Text.Length == 8)
             {
                 return;
             }
             isAllowBack = true;
             string digit = ((Button)sender).Text;
-            if(lblDisplay.Text is "0")
+            if(lblDisplay.Text == "0")
             {
                 lblDisplay.Text = "";
             }
@@ -104,7 +106,7 @@ namespace CPE200Lab1
 
         private void btnOperator_Click(object sender, EventArgs e)
         {
-            if (lblDisplay.Text is "Error")
+            if (lblDisplay.Text == "Error")
             {
                 return;
             }
@@ -131,13 +133,16 @@ namespace CPE200Lab1
 
         private void btnEqual_Click(object sender, EventArgs e)
         {
-            if (lblDisplay.Text is "Error")
+            if (lblDisplay.Text == "Error")
             {
                 return;
             }
             string secondOperand = lblDisplay.Text;
-            string result = calculate(operate, firstOperand, secondOperand);
-            if (result is "E" || result.Length > 8)
+
+            CalculatorEngine calEngine = new CalculatorEngine();
+
+        string result = calEngine.calculate(operate, firstOperand, secondOperand);
+            if (result == "E" || result.Length > 8)
             {
                 lblDisplay.Text = "Error";
             }
@@ -150,7 +155,7 @@ namespace CPE200Lab1
 
         private void btnDot_Click(object sender, EventArgs e)
         {
-            if (lblDisplay.Text is "Error")
+            if (lblDisplay.Text == "Error")
             {
                 return;
             }
@@ -158,7 +163,7 @@ namespace CPE200Lab1
             {
                 resetAll();
             }
-            if (lblDisplay.Text.Length is 8)
+            if (lblDisplay.Text.Length == 8)
             {
                 return;
             }
@@ -171,7 +176,7 @@ namespace CPE200Lab1
 
         private void btnSign_Click(object sender, EventArgs e)
         {
-            if (lblDisplay.Text is "Error")
+            if (lblDisplay.Text == "Error")
             {
                 return;
             }
@@ -180,11 +185,11 @@ namespace CPE200Lab1
                 resetAll();
             }
             // already contain negative sign
-            if (lblDisplay.Text.Length is 8)
+            if (lblDisplay.Text.Length == 8)
             {
                 return;
             }
-            if(lblDisplay.Text[0] is '-')
+            if(lblDisplay.Text[0] == '-')
             {
                 lblDisplay.Text = lblDisplay.Text.Substring(1, lblDisplay.Text.Length - 1);
             } else
@@ -200,7 +205,7 @@ namespace CPE200Lab1
 
         private void btnBack_Click(object sender, EventArgs e)
         {
-            if (lblDisplay.Text is "Error")
+            if (lblDisplay.Text == "Error")
             {
                 return;
             }
@@ -216,12 +221,12 @@ namespace CPE200Lab1
             {
                 string current = lblDisplay.Text;
                 char rightMost = current[current.Length - 1];
-                if(rightMost is '.')
+                if(rightMost == '.')
                 {
                     hasDot = false;
                 }
                 lblDisplay.Text = current.Substring(0, current.Length - 1);
-                if(lblDisplay.Text is "" || lblDisplay.Text is "-")
+                if(lblDisplay.Text == "" || lblDisplay.Text == "-")
                 {
                     lblDisplay.Text = "0";
                 }

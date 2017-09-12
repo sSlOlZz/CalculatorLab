@@ -15,12 +15,13 @@ namespace CPE200Lab1
         private bool isNumberPart = false;
         private bool isContainDot = false;
         private bool isSpaceAllowed = false;
-        private CalculatorEngine engine;
-
+        private RpnCalculatorEngine engine;
+        //double result_M;
+        //bool isMTotalClick;
         public ExtendForm()
         {
             InitializeComponent();
-            engine = new CalculatorEngine();
+            engine = new RpnCalculatorEngine();
         }
 
         private bool isOperator(char ch)
@@ -37,11 +38,11 @@ namespace CPE200Lab1
 
         private void btnNumber_Click(object sender, EventArgs e)
         {
-            if (lblDisplay.Text is "Error")
+            if (lblDisplay.Text == "Error")
             {
                 return;
             }
-            if (lblDisplay.Text is "0")
+            if (lblDisplay.Text == "0")
             {
                 lblDisplay.Text = "";
             }
@@ -56,14 +57,14 @@ namespace CPE200Lab1
 
         private void btnBinaryOperator_Click(object sender, EventArgs e)
         {
-            if (lblDisplay.Text is "Error")
+            if (lblDisplay.Text == "Error")
             {
                 return;
             }
             isNumberPart = false;
             isContainDot = false;
             string current = lblDisplay.Text;
-            if (current[current.Length - 1] != ' ')
+          //  if (current[current.Length - 1] != ' ')
             {
                 lblDisplay.Text += " " + ((Button)sender).Text + " ";
                 isSpaceAllowed = false;
@@ -72,20 +73,20 @@ namespace CPE200Lab1
 
         private void btnBack_Click(object sender, EventArgs e)
         {
-            if (lblDisplay.Text is "Error")
+            if (lblDisplay.Text == "Error")
             {
                 return;
             }
-            // check if the last one is operator
+            // check if the last one == operator
             string current = lblDisplay.Text;
-            if (current[current.Length - 1] is ' ' && current.Length > 2 && isOperator(current[current.Length - 2]))
+            if (current[current.Length - 1] == ' ' && current.Length > 2 && isOperator(current[current.Length - 2]))
             {
                 lblDisplay.Text = current.Substring(0, current.Length - 3);
             } else
             {
                 lblDisplay.Text = current.Substring(0, current.Length - 1);
             }
-            if (lblDisplay.Text is "")
+            if (lblDisplay.Text == "")
             {
                 lblDisplay.Text = "0";
             }
@@ -101,8 +102,8 @@ namespace CPE200Lab1
 
         private void btnEqual_Click(object sender, EventArgs e)
         {
-            string result = engine.Process(lblDisplay.Text);
-            if (result is "E")
+            string result = engine.RpnProcess(lblDisplay.Text);
+            if (result == "E")
             {
                 lblDisplay.Text = "Error";
             } else
@@ -113,41 +114,75 @@ namespace CPE200Lab1
 
         private void btnSign_Click(object sender, EventArgs e)
         {
-            if (lblDisplay.Text is "Error")
+            if (lblDisplay.Text == "Error")
             {
                 return;
             }
-            if (isNumberPart)
+            if(isNumberPart)
             {
-                return;
+                
+                 
             }
             string current = lblDisplay.Text;
-            if (current is "0")
+            //  Double test = Convert.ToDouble(current);
+
+            if (current == "0")
             {
+
                 lblDisplay.Text = "-";
-            } else if (current[current.Length - 1] is '-')
+
+            }
+            else if (current[current.Length - 1] == '-')
             {
                 lblDisplay.Text = current.Substring(0, current.Length - 1);
-                if (lblDisplay.Text is "")
+                if (lblDisplay.Text == "")
                 {
                     lblDisplay.Text = "0";
                 }
-            } else
-            {
-                lblDisplay.Text = current + "-";
             }
+            else
+            {
+              
+               
+                {
+                    lblDisplay.Text = "-" + current;
+                }
+                
+                
+            }
+
+            //if (current == "0")
+            //{
+
+            //    lblDisplay.Text = "-";
+
+            //}
+            //else if (current[current.Length - 1] == '-')
+            //{
+            //    lblDisplay.Text = current.Substring(0, current.Length - 1);
+            //    if (lblDisplay.Text == "")
+            //    {
+            //        lblDisplay.Text = "0";
+            //    }
+            //}
+            //else 
+            //{
+            //    lblDisplay.Text = "-" + current;
+            //}
+
             isSpaceAllowed = false;
+
         }
 
         private void btnDot_Click(object sender, EventArgs e)
         {
-            if (lblDisplay.Text is "Error")
+            if (lblDisplay.Text == "Error")
             {
                 return;
             }
-            if(!isContainDot)
+           // if (!isContainDot)
             {
-                isContainDot = true;
+            //    isContainDot = true;
                 lblDisplay.Text += ".";
                 isSpaceAllowed = false;
             }
@@ -155,7 +190,7 @@ namespace CPE200Lab1
 
         private void btnSpace_Click(object sender, EventArgs e)
         {
-            if(lblDisplay.Text is "Error")
+            if(lblDisplay.Text == "Error")
             {
                 return;
             }
@@ -165,5 +200,68 @@ namespace CPE200Lab1
                 isSpaceAllowed = false;
             }
         }
+
+        private void btnUnaryOperator_Click(object sender, EventArgs e)
+        {
+
+            if (lblDisplay.Text == "Error")
+            {
+                return;
+            }
+            isNumberPart = false;
+            isContainDot = false;
+            string current = lblDisplay.Text;
+
+           
+            //if (current[current.Length - 1] != ' ')
+            {
+                lblDisplay.Text += " " + ((Button)sender).Text + " ";
+                isSpaceAllowed = false;
+            }
+
+        }
+
+        private void ExtendForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        //private void mPlus_Click(object sender, EventArgs e)
+        //{
+        //    if (result_M == 0)
+        //    {
+        //        result_M = Double.Parse(lblDisplay.Text);
+        //    }
+        //    else
+        //    {
+        //        result_M = result_M + Double.Parse(lblDisplay.Text);
+        //    }
+        //    lblDisplay.Clear();
+        //}
+
+        //private void mMinus_Click(object sender, EventArgs e)
+        //{
+        //    if (result_M == 0)
+        //    {
+        //        result_M = Double.Parse(lblDisplay.Text);
+        //    }
+        //    else
+        //    {
+        //        result_M = result_M - Double.Parse(lblDisplay.Text);
+        //    }
+        //    lblDisplay.Clear();
+        //}
+
+        //private void mTotal_click(object sender, EventArgs e)
+        //{
+        //    isMTotalClick = true;
+        //    lblDisplay.Clear();
+        //    lblDisplay.Text = result_M.ToString();
+        //}
+
+        //private void mClear_click(object sender, EventArgs e)
+        //{
+        //    result_M = 0;
+        //}
     }
 }
